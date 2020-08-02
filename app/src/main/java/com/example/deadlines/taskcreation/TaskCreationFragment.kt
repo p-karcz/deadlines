@@ -1,5 +1,7 @@
 package com.example.deadlines.taskcreation
 
-class TaskCreationFragment {
+import androidx.fragment.app.Fragment
+
+class TaskCreationFragment : Fragment() {
 
 }

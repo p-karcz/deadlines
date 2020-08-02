@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.deadlines.alltasks.AllTasksViewModel" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,7 +25,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_add_24"
             android:layout_gravity="bottom|end"
-            android:layout_margin="12dp"/>
+            android:layout_margin="12dp"
+            android:onClick="@{() -> viewModel.startNavigationToTaskCreation()}"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

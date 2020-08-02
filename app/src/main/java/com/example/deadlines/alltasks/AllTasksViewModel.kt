@@ -13,5 +13,11 @@ class AllTasksViewModel(private val database: TasksDatabase) : ViewModel() {
     val navigateToTaskCreation: LiveData<Boolean>
         get() = _navigateToTaskCreation
 
+    fun startNavigationToTaskCreation() {
+        _navigateToTaskCreation.value = true
+    }
 
+    fun doneNavigationToTaskCreation() {
+        _navigateToTaskCreation.value = null
+    }
 }

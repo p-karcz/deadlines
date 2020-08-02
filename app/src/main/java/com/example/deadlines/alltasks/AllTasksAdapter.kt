@@ -1,27 +1,29 @@
 package com.example.deadlines.alltasks
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.deadlines.R
 import com.example.deadlines.database.Task
-import kotlinx.android.synthetic.main.task_template.view.*
+import com.example.deadlines.databinding.TaskTemplateBinding
 
 class AllTasksAdapter: ListAdapter<Task, AllTasksAdapter.AllTasksViewHolder>(TaskCallback()) {
 
-    var tasks: List<Task>? = emptyList()
-
-    class AllTasksViewHolder(val view: View): RecyclerView.ViewHolder(view)
+    class AllTasksViewHolder(private var binding: TaskTemplateBinding):
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(task: Task) {
+            binding.firstTextView.text = task.name
+            binding.executePendingBindings()
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllTasksViewHolder {
-        return AllTasksViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.task_template, parent, false))
+        return AllTasksViewHolder(TaskTemplateBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
     override fun onBindViewHolder(holder: AllTasksViewHolder, position: Int) {
-        holder.view.first_text_view.text = tasks?.get(position)?.name ?: ""
+        holder.bind(getItem(position))
     }
 
     class TaskCallback: DiffUtil.ItemCallback<Task>() {
@@ -34,5 +36,4 @@ class AllTasksAdapter: ListAdapter<Task, AllTasksAdapter.AllTasksViewHolder>(Tas
         }
 
     }
-
 }
