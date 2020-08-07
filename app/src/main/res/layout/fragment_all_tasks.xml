@@ -9,24 +9,10 @@
             type="com.example.deadlines.alltasks.AllTasksViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tasks_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tasks_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_add_24"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="12dp"
-            android:onClick="@{() -> viewModel.startNavigationToTaskCreation()}"/>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
