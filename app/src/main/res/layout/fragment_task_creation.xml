@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.deadlines.taskcreation.TaskCreationViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -36,41 +42,39 @@
             android:id="@+id/endTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
             android:text="Deadline"
-            app:layout_constraintBottom_toTopOf="@+id/editTextEndTime"
+            app:layout_constraintBottom_toTopOf="@+id/textEndDate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/taskDescription" />
 
-        <EditText
-            android:id="@+id/editTextEndTime"
+        <TextView
+            android:id="@+id/textEndTime"
+            android:text="Pick Time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:inputType="time"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/editTextEndDate"
+            app:layout_constraintEnd_toStartOf="@+id/textEndDate"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/taskDescription" />
 
-        <EditText
-            android:id="@+id/editTextEndDate"
+        <TextView
+            android:id="@+id/textEndDate"
+            android:text="Pick Date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
-            android:inputType="date"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editTextEndTime"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/textEndTime"
+            app:layout_constraintTop_toBottomOf="@+id/taskDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
