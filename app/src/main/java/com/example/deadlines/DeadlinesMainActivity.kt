@@ -85,8 +85,4 @@ class DeadlinesMainActivity : AppCompatActivity() {
             binding.fab.setImageDrawable(getDrawable(R.drawable.ic_baseline_add_24))
         }
     }
-
-    fun switch() {
-
-    }
 }
