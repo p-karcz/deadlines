@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/navHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,8 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_add_24"
-            app:layout_anchor="@id/bottomAppBar"
-            android:onClick="@{() -> viewModel.navigate()}"/>
+            app:layout_anchor="@id/bottomAppBar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

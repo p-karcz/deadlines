@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import java.util.*
 
-class DatePickerFragment(private val listenerImpl: OnDateSetListenerImpl): DialogFragment() {
+class DatePickerFragment(private val listenerImpl: DatePickerDialog.OnDateSetListener): DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val calendar = Calendar.getInstance()
