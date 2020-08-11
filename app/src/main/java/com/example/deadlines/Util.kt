@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
+import com.example.deadlines.taskcreation.TaskCreationViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -13,7 +14,7 @@ enum class CurrFragment {
     TASK_CREATION
 }
 
-class OnTimeSetListenerImpl(private val textView: TextView): TimePickerDialog.OnTimeSetListener {
+class OnTimeSetListenerImpl(private val textView: TextView, private val viewModel: DeadlinesMainViewModel): TimePickerDialog.OnTimeSetListener {
     override fun onTimeSet(view: TimePicker, hour: Int, minute: Int) {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hour)
@@ -24,7 +25,7 @@ class OnTimeSetListenerImpl(private val textView: TextView): TimePickerDialog.On
     }
 }
 
-class OnDateSetListenerImpl(private val textView: TextView): DatePickerDialog.OnDateSetListener {
+class OnDateSetListenerImpl(private val textView: TextView, private val viewModel: DeadlinesMainViewModel): DatePickerDialog.OnDateSetListener {
     override fun onDateSet(view: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)

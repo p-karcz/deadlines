@@ -3,13 +3,20 @@ package com.example.deadlines.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Entity
 data class Task(
-    @PrimaryKey(autoGenerate = true)  val id: Int = 0,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     var name: String,
-    @ColumnInfo(name = "end_time") var entTime: Long,
-    var description: String
+    var description: String,
+    var hour: Int,
+    var minute: Int,
+    var year: Int,
+    var month: Int,
+    var dayOfMonth: Int
 )
 
 @Dao
