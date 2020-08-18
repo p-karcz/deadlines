@@ -3,8 +3,6 @@ package com.example.deadlines.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Entity
 data class Task(
@@ -12,12 +10,24 @@ data class Task(
     val id: Int = 0,
     var name: String,
     var description: String,
-    var hour: Int,
-    var minute: Int,
-    var year: Int,
-    var month: Int,
-    var dayOfMonth: Int
-)
+    var time: Long
+) {
+    data class TaskBuilder(
+        var name: String? = null,
+        var description: String? = null,
+        var time: Long = 0
+    ) {
+        fun name(name: String) = apply { this@TaskBuilder.name = name }
+        fun description(description: String) = apply { this@TaskBuilder.description = description }
+        fun time(time: Long) = apply { this@TaskBuilder.time += time }
+        fun reset() {
+            this.name = null
+            this.description = null
+            this.time = 0
+        }
+        fun build() = Task(0, name!!, description!!, time)
+    }
+}
 
 @Dao
 interface TaskDao {

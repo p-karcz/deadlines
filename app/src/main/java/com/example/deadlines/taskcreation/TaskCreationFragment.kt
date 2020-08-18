@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.example.deadlines.DeadlinesMainViewModel
 import com.example.deadlines.OnDateSetListenerImpl
 import com.example.deadlines.OnTimeSetListenerImpl
@@ -37,6 +37,14 @@ class TaskCreationFragment : Fragment() {
 
         binding.textEndDate.setOnClickListener {
             DatePickerFragment(onDateSetListenerImpl).show(parentFragmentManager, "Pick Date")
+        }
+
+        binding.taskName.addTextChangedListener {
+            activityViewModel.fillName(it.toString())
+        }
+
+        binding.taskDescription.addTextChangedListener {
+            activityViewModel.fillDescription(it.toString())
         }
 
         return binding.root

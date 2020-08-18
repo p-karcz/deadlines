@@ -8,17 +8,21 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.deadlines.R
 import com.example.deadlines.database.getInstance
 import com.example.deadlines.databinding.FragmentAllTasksBinding
+import com.google.android.material.bottomappbar.BottomAppBar
 
 class AllTasksFragment : Fragment() {
+
+    private lateinit var binding: FragmentAllTasksBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        val binding: FragmentAllTasksBinding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_all_tasks, container, false)
 
         val database = getInstance(requireNotNull(this.activity).applicationContext)
