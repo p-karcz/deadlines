@@ -1,10 +1,11 @@
-package com.example.deadlines
+package com.pkarcz.deadlines
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
+import com.facebook.AccessToken
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,4 +38,9 @@ class OnDateSetListenerImpl(private val textView: TextView, private val viewMode
         viewModel.taskBuilder.time(calendar.timeInMillis)
         viewModel.dateCorrectness = true
     }
+}
+
+fun isUserLoggedIn(): Boolean {
+    val accessToken = AccessToken.getCurrentAccessToken()
+    return accessToken != null && !accessToken.isExpired
 }

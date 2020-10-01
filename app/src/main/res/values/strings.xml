@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Deadlines</string>
+    <string name="facebook_app_id">1456714524523623</string>
+    <string name="fb_login_protocol_scheme">fb1456714524523623</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="about">About</string>
+    <string name="your_tasks">Your tasks</string>
+    <string name="log_in_out">Log in with Facebook</string>
 </resources>

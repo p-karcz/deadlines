@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.deadlines.alltasks.AllTasksViewModel" />
+            type="com.pkarcz.deadlines.alltasks.AllTasksViewModel" />
     </data>
 
         <androidx.recyclerview.widget.RecyclerView

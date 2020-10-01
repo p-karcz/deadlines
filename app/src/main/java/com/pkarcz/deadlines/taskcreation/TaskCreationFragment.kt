@@ -1,4 +1,4 @@
-package com.example.deadlines.taskcreation
+package com.pkarcz.deadlines.taskcreation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.deadlines.DeadlinesMainViewModel
-import com.example.deadlines.OnDateSetListenerImpl
-import com.example.deadlines.OnTimeSetListenerImpl
-import com.example.deadlines.R
-import com.example.deadlines.databinding.FragmentTaskCreationBinding
+import com.pkarcz.deadlines.DeadlinesMainViewModel
+import com.pkarcz.deadlines.OnDateSetListenerImpl
+import com.pkarcz.deadlines.OnTimeSetListenerImpl
+import com.pkarcz.deadlines.R
+import com.pkarcz.deadlines.databinding.FragmentTaskCreationBinding
 
 class TaskCreationFragment : Fragment() {
 

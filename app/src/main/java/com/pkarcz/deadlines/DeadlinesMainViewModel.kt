@@ -1,8 +1,13 @@
-package com.example.deadlines
+package com.pkarcz.deadlines
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.*
-import com.example.deadlines.database.Task
-import com.example.deadlines.database.TasksDatabase
+import com.pkarcz.deadlines.database.Task
+import com.pkarcz.deadlines.database.TasksDatabase
+import com.pkarcz.deadlines.receivers.AlarmReceiver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14,6 +19,8 @@ class DeadlinesMainViewModel(private val tasksDatabase: TasksDatabase): ViewMode
     var dateCorrectness: Boolean = false
 
     val taskBuilder = Task.TaskBuilder()
+
+    private var alarmManager: AlarmManager? = null
 
     private suspend fun insertTask(task: Task) {
         withContext(Dispatchers.IO) {
@@ -35,10 +42,23 @@ class DeadlinesMainViewModel(private val tasksDatabase: TasksDatabase): ViewMode
         }
     }
 
-    fun checkAndBuild() {
+    fun checkAndBuild(context: Context) {
         if(nameCorrectness && descriptionCorrectness && timeCorrectness && dateCorrectness) {
             viewModelScope.launch {
-                insertTask((taskBuilder.build()))
+                val task = taskBuilder.build()
+                insertTask(task)
+
+                if(alarmManager == null) {
+                    alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                }
+
+                val intent = Intent(context, AlarmReceiver::class.java).apply {
+                    putExtra("TASK_ID", task.id)
+                }
+
+                val alarmIntent = PendingIntent.getBroadcast(context, task.id, intent, 0)
+
+                alarmManager!!.setExact(AlarmManager.RTC_WAKEUP, task.time, alarmIntent)
             }
         }
     }

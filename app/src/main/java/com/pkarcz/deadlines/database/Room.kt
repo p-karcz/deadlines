@@ -1,4 +1,4 @@
-package com.example.deadlines.database
+package com.pkarcz.deadlines.database
 
 import android.content.Context
 import androidx.lifecycle.LiveData

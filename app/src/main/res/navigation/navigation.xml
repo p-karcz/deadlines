@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/allTasksFragment"
-        android:name="com.example.deadlines.alltasks.AllTasksFragment"
+        android:name="com.pkarcz.deadlines.alltasks.AllTasksFragment"
         android:label="all_tasks_fragment"
         tools:layout="@layout/fragment_all_tasks" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskCreationFragment"
-        android:name="com.example.deadlines.taskcreation.TaskCreationFragment"
+        android:name="com.pkarcz.deadlines.taskcreation.TaskCreationFragment"
         android:label="fragment_task_creation"
         tools:layout="@layout/fragment_task_creation" >
         <action
@@ -25,4 +25,13 @@
             app:popUpTo="@id/allTasksFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.pkarcz.deadlines.about.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.pkarcz.deadlines.login.LoginFragment"
+        android:label="LoginFragment" />
 </navigation>
