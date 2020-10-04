@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 
 class AllTasksViewModel(private val database: TasksDatabase) : ViewModel() {
 
-    val tasks = database.taskDao.getAllTasks()
+    val tasks = database.taskDao.getTasksInProgress()
 
     fun delete(position: Int) {
         viewModelScope.launch {

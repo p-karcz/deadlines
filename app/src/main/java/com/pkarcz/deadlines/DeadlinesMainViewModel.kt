@@ -18,9 +18,19 @@ class DeadlinesMainViewModel(private val tasksDatabase: TasksDatabase): ViewMode
     var timeCorrectness: Boolean = false
     var dateCorrectness: Boolean = false
 
+    private val unfinishedTasks = tasksDatabase.taskDao.getUnfinishedTasks()
+
     val taskBuilder = Task.TaskBuilder()
 
     private var alarmManager: AlarmManager? = null
+
+    fun isUnfinishedTasksListEmpty(): Boolean {
+        return unfinishedTasks.value.isNullOrEmpty()
+    }
+
+    fun deleteFirstUnfinishedTask() {
+        tasksDatabase.taskDao.deleteTasks(unfinishedTasks.value!![0])
+    }
 
     private suspend fun insertTask(task: Task) {
         withContext(Dispatchers.IO) {

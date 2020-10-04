@@ -10,7 +10,8 @@ data class Task(
     val id: Int = 0,
     var name: String,
     var description: String,
-    var time: Long
+    var time: Long,
+    var inProgress: Boolean = true
 ) {
     data class TaskBuilder(
         var name: String? = null,
@@ -40,11 +41,17 @@ interface TaskDao {
     @Query("delete from Task")
     fun deleteAllTasks()
 
-    @Update
-    fun updateTask(task: Task)
+    @Query("select * from Task where id = :taskId")
+    fun getTask(taskId: Int): LiveData<Task>
 
-    @Query("select * from Task")
-    fun getAllTasks(): LiveData<List<Task>>
+    @Query("update Task set inProgress = 0 where id = :taskId")
+    fun changeProgress(taskId: Int)
+
+    @Query("select * from Task where inProgress = 1")
+    fun getTasksInProgress(): LiveData<List<Task>>
+
+    @Query("select * from Task where inProgress = 0")
+    fun getUnfinishedTasks(): LiveData<List<Task>>
 }
 
 @Database(entities = [Task::class], version = 1)

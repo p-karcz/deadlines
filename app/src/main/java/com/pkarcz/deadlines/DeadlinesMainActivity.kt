@@ -3,6 +3,7 @@ package com.pkarcz.deadlines
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -14,8 +15,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import com.facebook.AccessToken
-import com.facebook.AccessTokenTracker
+import com.facebook.*
+import com.facebook.internal.CallbackManagerImpl
+import com.facebook.share.Sharer
+import com.facebook.share.model.ShareContent
+import com.facebook.share.model.ShareLinkContent
+import com.facebook.share.widget.ShareDialog
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.pkarcz.deadlines.bottomsheet.BottomSheetFragment
 import com.pkarcz.deadlines.database.TasksDatabase
@@ -33,6 +38,12 @@ class DeadlinesMainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    private lateinit var callbackManager: CallbackManager
+
+    private lateinit var shareDialog: ShareDialog
+
+    private lateinit var shareContent: ShareLinkContent
+
     // Instance of a ViewModel which should handle most of the actions
     // Created using ktx
     private val viewModel: DeadlinesMainViewModel by viewModels {
@@ -42,9 +53,33 @@ class DeadlinesMainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        callbackManager = CallbackManager.Factory.create()
+
         createNotificationChannel("over")
 
         tasksDatabase = getInstance(this)
+
+        val shareDialog = ShareDialog(this)
+        val shareContent = ShareLinkContent.Builder()
+            .setContentUrl(Uri.parse("https://github.com/p-karcz/deadlines"))
+            .setQuote("Check out this application and manage your time more effectively")
+            .build()
+
+        shareDialog.registerCallback(callbackManager, object: FacebookCallback<Sharer.Result> {
+            override fun onSuccess(result: Sharer.Result?) {
+                viewModel.deleteFirstUnfinishedTask()
+            }
+
+            override fun onCancel() {
+                shareDialog.show(shareContent)
+            }
+
+            override fun onError(error: FacebookException?) {
+
+            }
+        })
+
+        showShareDialog()
 
         binding = DataBindingUtil.setContentView(this, R.layout.deadlines_main_activity)
 
@@ -126,6 +161,11 @@ class DeadlinesMainActivity : AppCompatActivity() {
         binding.viewModel = viewModel
     }
 
+    override fun onResume() {
+        super.onResume()
+        showShareDialog()
+    }
+
     private fun createNotificationChannel(channelId: String) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -145,5 +185,11 @@ class DeadlinesMainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
+    }
+
+    private fun showShareDialog() {
+        if(!viewModel.isUnfinishedTasksListEmpty()){
+            shareDialog.show(shareContent)
+        }
     }
 }

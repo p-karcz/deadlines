@@ -4,10 +4,14 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.pkarcz.deadlines.DeadlinesMainActivity
 import com.pkarcz.deadlines.R
+import com.pkarcz.deadlines.database.Task
+import com.pkarcz.deadlines.database.getInstance
+import kotlinx.coroutines.*
 
 class AlarmReceiver: BroadcastReceiver() {
 
@@ -17,6 +21,17 @@ class AlarmReceiver: BroadcastReceiver() {
         val notificationIntent = Intent(context, DeadlinesMainActivity::class.java).let {
             PendingIntent.getActivity(context, taskId, it, 0)
         }
+
+//        val tasksDatabase = getInstance(context!!)
+//
+//        val alarmJob = Job()
+//        val alarmScope = CoroutineScope(Dispatchers.Main + alarmJob)
+//
+//        alarmScope.launch {
+//            withContext(Dispatchers.IO) {
+//                tasksDatabase.taskDao.changeProgress(taskId)
+//            }
+//        }
 
         val builder = NotificationCompat.Builder(context!!, "over")
             .setSmallIcon(R.drawable.ic_deadline_notification)
