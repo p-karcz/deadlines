@@ -3,6 +3,7 @@ package com.pkarcz.deadlines
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -40,9 +42,12 @@ class DeadlinesMainActivity : AppCompatActivity() {
 
     private lateinit var callbackManager: CallbackManager
 
-    private lateinit var shareDialog: ShareDialog
+    private val shareDialog: ShareDialog = ShareDialog(this)
 
-    private lateinit var shareContent: ShareLinkContent
+    private val shareContent: ShareLinkContent = ShareLinkContent.Builder()
+        .setContentUrl(Uri.parse("https://github.com/p-karcz/deadlines"))
+        .setQuote("Check out this application and manage your time more effectively")
+        .build()
 
     // Instance of a ViewModel which should handle most of the actions
     // Created using ktx
@@ -59,15 +64,13 @@ class DeadlinesMainActivity : AppCompatActivity() {
 
         tasksDatabase = getInstance(this)
 
-        val shareDialog = ShareDialog(this)
-        val shareContent = ShareLinkContent.Builder()
-            .setContentUrl(Uri.parse("https://github.com/p-karcz/deadlines"))
-            .setQuote("Check out this application and manage your time more effectively")
-            .build()
-
         shareDialog.registerCallback(callbackManager, object: FacebookCallback<Sharer.Result> {
             override fun onSuccess(result: Sharer.Result?) {
-                viewModel.deleteFirstUnfinishedTask()
+                if(result == null) {
+                    shareDialog.show(shareContent)
+                } else {
+                    viewModel.deleteFirstUnfinishedTask()
+                }
             }
 
             override fun onCancel() {
@@ -75,11 +78,9 @@ class DeadlinesMainActivity : AppCompatActivity() {
             }
 
             override fun onError(error: FacebookException?) {
-
+                shareDialog.show(shareContent)
             }
         })
-
-        showShareDialog()
 
         binding = DataBindingUtil.setContentView(this, R.layout.deadlines_main_activity)
 
@@ -159,11 +160,12 @@ class DeadlinesMainActivity : AppCompatActivity() {
 
         // Assigning ViewModel created earlier to the viewModel variable inside <layout> tag in the activity's layout
         binding.viewModel = viewModel
-    }
 
-    override fun onResume() {
-        super.onResume()
-        showShareDialog()
+        viewModel.unfinishedTasks.observe(this, Observer {
+            if(!viewModel.isUnfinishedTasksListEmpty()) {
+                showShareDialog()
+            }
+        })
     }
 
     private fun createNotificationChannel(channelId: String) {
@@ -191,5 +193,10 @@ class DeadlinesMainActivity : AppCompatActivity() {
         if(!viewModel.isUnfinishedTasksListEmpty()){
             shareDialog.show(shareContent)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
     }
 }

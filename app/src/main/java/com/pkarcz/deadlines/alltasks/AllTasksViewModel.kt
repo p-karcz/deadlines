@@ -19,7 +19,7 @@ class AllTasksViewModel(private val database: TasksDatabase) : ViewModel() {
 
     private suspend fun deleteInBackground(position: Int) {
         withContext(Dispatchers.IO) {
-            database.taskDao.deleteTasks(tasks.value!![position])
+            database.taskDao.deleteTask(tasks.value!![position])
         }
     }
 }

@@ -8,9 +8,7 @@ import androidx.lifecycle.*
 import com.pkarcz.deadlines.database.Task
 import com.pkarcz.deadlines.database.TasksDatabase
 import com.pkarcz.deadlines.receivers.AlarmReceiver
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class DeadlinesMainViewModel(private val tasksDatabase: TasksDatabase): ViewModel() {
     private var nameCorrectness: Boolean = false
@@ -18,24 +16,32 @@ class DeadlinesMainViewModel(private val tasksDatabase: TasksDatabase): ViewMode
     var timeCorrectness: Boolean = false
     var dateCorrectness: Boolean = false
 
-    private val unfinishedTasks = tasksDatabase.taskDao.getUnfinishedTasks()
+    private val _unfinishedTasks = tasksDatabase.taskDao.getUnfinishedTasks()
+    val unfinishedTasks: LiveData<List<Task>>
+        get() = _unfinishedTasks
 
     val taskBuilder = Task.TaskBuilder()
 
     private var alarmManager: AlarmManager? = null
 
     fun isUnfinishedTasksListEmpty(): Boolean {
-        return unfinishedTasks.value.isNullOrEmpty()
+        return _unfinishedTasks.value.isNullOrEmpty()
     }
 
     fun deleteFirstUnfinishedTask() {
-        tasksDatabase.taskDao.deleteTasks(unfinishedTasks.value!![0])
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                tasksDatabase.taskDao.deleteTask(_unfinishedTasks.value!![0])
+            }
+        }
     }
 
-    private suspend fun insertTask(task: Task) {
+    private suspend fun insertTask(task: Task): Int {
+        var id = 0
         withContext(Dispatchers.IO) {
-            tasksDatabase.taskDao.insertTasks(task)
+            id = tasksDatabase.taskDao.insertTask(task).toInt()
         }
+        return id
     }
 
     fun fillName(name: String?) {
@@ -56,17 +62,17 @@ class DeadlinesMainViewModel(private val tasksDatabase: TasksDatabase): ViewMode
         if(nameCorrectness && descriptionCorrectness && timeCorrectness && dateCorrectness) {
             viewModelScope.launch {
                 val task = taskBuilder.build()
-                insertTask(task)
+                val id = insertTask(task)
 
                 if(alarmManager == null) {
                     alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 }
 
                 val intent = Intent(context, AlarmReceiver::class.java).apply {
-                    putExtra("TASK_ID", task.id)
+                    putExtra("TASK_ID", id)
                 }
 
-                val alarmIntent = PendingIntent.getBroadcast(context, task.id, intent, 0)
+                val alarmIntent = PendingIntent.getBroadcast(context, id, intent, 0)
 
                 alarmManager!!.setExact(AlarmManager.RTC_WAKEUP, task.time, alarmIntent)
             }

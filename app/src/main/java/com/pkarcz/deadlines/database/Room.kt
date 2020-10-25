@@ -33,10 +33,10 @@ data class Task(
 @Dao
 interface TaskDao {
     @Insert
-    fun insertTasks(vararg tasks: Task)
+    fun insertTask(task: Task): Long
 
     @Delete
-    fun deleteTasks(vararg tasks: Task)
+    fun deleteTask(task: Task)
 
     @Query("delete from Task")
     fun deleteAllTasks()
@@ -45,7 +45,7 @@ interface TaskDao {
     fun getTask(taskId: Int): LiveData<Task>
 
     @Query("update Task set inProgress = 0 where id = :taskId")
-    fun changeProgress(taskId: Int)
+    fun changeProgressToFalse(taskId: Int)
 
     @Query("select * from Task where inProgress = 1")
     fun getTasksInProgress(): LiveData<List<Task>>

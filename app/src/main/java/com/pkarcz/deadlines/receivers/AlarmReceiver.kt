@@ -22,18 +22,18 @@ class AlarmReceiver: BroadcastReceiver() {
             PendingIntent.getActivity(context, taskId, it, 0)
         }
 
-//        val tasksDatabase = getInstance(context!!)
-//
-//        val alarmJob = Job()
-//        val alarmScope = CoroutineScope(Dispatchers.Main + alarmJob)
-//
-//        alarmScope.launch {
-//            withContext(Dispatchers.IO) {
-//                tasksDatabase.taskDao.changeProgress(taskId)
-//            }
-//        }
+        val tasksDatabase = getInstance(context!!)
 
-        val builder = NotificationCompat.Builder(context!!, "over")
+        val alarmJob = Job()
+        val alarmScope = CoroutineScope(Dispatchers.Main + alarmJob)
+
+        alarmScope.launch {
+            withContext(Dispatchers.IO) {
+                tasksDatabase.taskDao.changeProgressToFalse(taskId)
+            }
+        }
+
+        val builder = NotificationCompat.Builder(context, "over")
             .setSmallIcon(R.drawable.ic_deadline_notification)
             .setContentTitle("Test")
             .setContentText("Tescik")
